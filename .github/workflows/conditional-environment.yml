@@ -47,3 +47,16 @@ jobs:
     steps:
       - name: Deploy
         run: echo I am deploying into PROD!
+
+  testdeployment_job:
+    if: inputs.environment == 'test'
+    environment:
+      name: test
+      url: http://myapp.com
+    permissions:
+      contents: write
+      packages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo I am deploying into PROD!
