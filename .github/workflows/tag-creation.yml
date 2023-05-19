@@ -1,0 +1,17 @@
+name: Tag - Creation
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Enter Preferred Tag Name.'
+        required: true
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: git tag ${{ github.event.inputs.tag }}
