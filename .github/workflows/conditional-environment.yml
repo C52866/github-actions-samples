@@ -1,0 +1,49 @@
+name: Conditional Environment Deployment 
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose Environment'
+        required: true
+        type: environment
+        default: development
+jobs:
+  devdeployment_job:
+    if: inputs.environment == 'development'
+    environment:
+      name: development
+      url: http://dev.myapp.com
+    permissions:
+      contents: write
+      packages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo I am deploying into DEV!
+
+  stagedeployment_job:
+    if: inputs.environment == 'staging'
+    environment:
+      name: staging
+      url: http://stage.myapp.com
+    permissions:
+      contents: write
+      packages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo I am deploying into STAGE!
+
+  proddeployment_job:
+    if: inputs.environment == 'production'
+    environment:
+      name: production
+      url: http://myapp.com
+    permissions:
+      contents: write
+      packages: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo I am deploying into PROD!
