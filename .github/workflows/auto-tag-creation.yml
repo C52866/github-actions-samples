@@ -20,7 +20,7 @@ jobs:
       with:
         strategy: regex
         root: "./pom.xml"
-        regex_pattern: "<version>(.+?)<\/version>"
+        regex_pattern: "<version>(.+?)</version>"
         tag_message: ${{inputs.tagdescription}}
       env:
         GITHUB_TOKEN: "${{ github.token }}"
