@@ -8,9 +8,40 @@ on:
         required: true
         type: environment
         default: development
+      tagname:
+        description: 'Enter Tag Name To Deploy Specific Features'
+        required: false        
 jobs:
+  build:
+    name: Building
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read   
+    steps:
+      - name: Check out HEAD
+        if: inputs.tagname == ''
+        uses: actions/checkout@v3
+        
+      - name: Check out Tag ${{input.tagname}}
+        if: inputs.tagname != ''
+        uses: actions/checkout@v3
+        
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+      - name: Maven Settings
+        uses: s4u/maven-settings-action@v2
+        
+      - name: Build War
+        run: mvn -B package --file pom.xml
+    
   devdeployment_job:
+    name: Development Deployment Job
     if: inputs.environment == 'development'
+    needs: [build]
     environment:
       name: development
       url: http://dev.myapp.com
@@ -23,7 +54,9 @@ jobs:
         run: echo I am deploying into DEV!
 
   stagedeployment_job:
+    name: Stage Deployment Job
     if: inputs.environment == 'staging'
+    needs: [build]
     environment:
       name: staging
       url: http://stage.myapp.com
@@ -36,22 +69,11 @@ jobs:
         run: echo I am deploying into STAGE!
 
   proddeployment_job:
+    name: Prod Deployment Job
     if: inputs.environment == 'production'
+    needs: [build]
     environment:
       name: production
-      url: http://myapp.com
-    permissions:
-      contents: write
-      packages: read
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: echo I am deploying into PROD!
-
-  testdeployment_job:
-    if: inputs.environment == 'test'
-    environment:
-      name: test
       url: http://myapp.com
     permissions:
       contents: write
