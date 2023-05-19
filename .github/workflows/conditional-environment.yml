@@ -23,9 +23,11 @@ jobs:
         if: inputs.tagname == ''
         uses: actions/checkout@v3
         
-      - name: Check out Tag ${{input.tagname}}
+      - name: Check out Tag ${{inputs.tagname}}
         if: inputs.tagname != ''
         uses: actions/checkout@v3
+        with:
+          ref: 'refs/tags/${{inputs.tagname}}'
         
       - name: Set up JDK 8
         uses: actions/setup-java@v3
