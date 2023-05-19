@@ -30,8 +30,9 @@ jobs:
 
     - name: Custom Tag Creation
       if: inputs.tag != ''
-      uses: butlerlogic/action-autotag@stable
+      uses: butlerlogic/action-autotag@master
       with:
+        strategy: manual
         tag_message: ${{inputs.tagdescription}}
         version: ${{inputs.tag}}
       env:
