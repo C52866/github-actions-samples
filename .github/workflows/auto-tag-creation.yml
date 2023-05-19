@@ -1,0 +1,35 @@
+name: Auto Tag - Creation
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Enter Preferred Tag(Eg: v1.0.0) or It picks from pom.xml'
+        required: false
+      tagdescription:
+        description: 'Enter Tag Description'
+        required: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Auto Tag Creation
+      if: inputs.tag == ''
+      uses: butlerlogic/action-autotag@stable
+      with:
+        strategy: regex
+        root: "./pom.xml"
+        regex_pattern: "<version>(.+?)<\/version>"
+        tag_message: ${{inputs.tagdescription}}
+      env:
+        GITHUB_TOKEN: "${{ github.token }}"
+
+    - name: Custom Tag Creation
+      if: inputs.tag != ''
+      uses: butlerlogic/action-autotag@stable
+      with:
+        tag_message: ${{inputs.tagdescription}}
+        version: ${{inputs.tag}}
+      env:
+        GITHUB_TOKEN: "${{ github.token }}"
