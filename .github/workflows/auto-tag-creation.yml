@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Auto Tag Creation
       if: inputs.tag == ''
-      uses: butlerlogic/action-autotag@1.0.0
+      uses: butlerlogic/action-autotag@stable
       with:
         strategy: regex
         root: "./pom.xml"
@@ -30,10 +30,9 @@ jobs:
 
     - name: Custom Tag Creation
       if: inputs.tag != ''
-      uses: butlerlogic/action-autotag@1.0.0
+      uses: rickstaa/action-create-tag@v1
       with:
-        strategy: manual
-        tag_message: ${{inputs.tagdescription}}
-        version: ${{inputs.tag}}
+        message: ${{inputs.tagdescription}}
+        tag: ${{inputs.tag}}
       env:
         GITHUB_TOKEN: "${{ github.token }}"
