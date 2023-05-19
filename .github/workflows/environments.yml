@@ -1,49 +1,43 @@
 name: Sample Environments Deploy
-
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
+  workflow_dispatch: null
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Compile
         run: echo Hello, world!
-
   DeployDev:
-    name: Deploy to Dev 
-    needs: [Build]
+    name: Deploy to Dev
+    needs:
+      - Build
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: development
-      url: 'http://dev.myapp.com'
+      url: http://dev.myapp.com
     steps:
       - name: Deploy
-        run: echo I am deploying! 
-
+        run: echo I am deploying!
   DeployStaging:
-    name: Deploy to Staging 
-    needs: [Build]
+    name: Deploy to Staging
+    needs:
+      - Build
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: staging
-      url: 'http://test.myapp.com'
+      url: http://test.myapp.com
     steps:
       - name: Deploy
-        run: echo I am deploying! 
-
+        run: echo I am deploying!
   DeployProd:
-    name: Deploy to Production 
-    needs: [DeployStaging]
+    name: Deploy to Production
+    needs:
+      - DeployStaging
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: production
-      url: 'http://www.myapp.com'
+      url: http://www.myapp.com
     steps:
       - name: Deploy
-        run: echo I am deploying! 
-
-	  
+        run: echo I am deploying!
