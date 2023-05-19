@@ -6,7 +6,9 @@ on:
       tag:
         description: 'Enter Preferred Tag Name.'
         required: true
-
+      tagdescription:
+        description: 'Enter Tag Description.'
+        required: true
 jobs:
   tag:
     runs-on: ubuntu-latest
@@ -18,5 +20,5 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          git tag ${{ github.event.inputs.tag }}
+          git tag ${{ github.event.inputs.tag }} -m ${{ github.event.inputs.tagdescription }}
           git push origin ${{ github.event.inputs.tag }}
